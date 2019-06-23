@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.4179565429687499,
-      "y": 0.4179565429687499,
+      "x": 0.41795654296875,
+      "y": 0.41795654296875,
       "z": 1
     },
     "_quat": {
@@ -1744,7 +1744,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "100",
+    "_string": "500",
     "_tabIndex": 0,
     "editingDidBegan": [],
     "textChanged": [],
