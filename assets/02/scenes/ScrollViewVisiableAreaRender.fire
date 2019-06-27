@@ -1736,7 +1736,7 @@
       "height": 0
     },
     "_resize": 1,
-    "_N$layoutType": 3,
+    "_N$layoutType": 2,
     "_N$padding": 0,
     "_N$cellSize": {
       "__type__": "cc.Size",

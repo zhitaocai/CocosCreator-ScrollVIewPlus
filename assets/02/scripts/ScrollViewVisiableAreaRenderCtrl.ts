@@ -24,6 +24,10 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 	})
 	childNodeCountEditBox: cc.EditBox = null;
 
+	start() {
+		this.onFramingLoadBtnClick();
+	}
+
 	async onFramingLoadBtnClick() {
 		this.loadingDialogCtrl.show();
 		this.scrollView.content.removeAllChildren();
