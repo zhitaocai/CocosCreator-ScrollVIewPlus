@@ -1,6 +1,6 @@
 import LoadingDialogCtrl from "../../01/scripts/LoadingDialogCtrl";
-import BigItemPrefab from "../prefabs/BigItemPrefab";
-import SmallItemPrefab from "../prefabs/SmallItemPrefab";
+import SeedPicItemPrefab from "../prefabs/SeedPicItemPrefab";
+import ScrollViewPlus from "./utils/ScrollViewPlus";
 
 const { ccclass, property } = cc._decorator;
 
@@ -10,10 +10,7 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 	scrollView: cc.ScrollView = null;
 
 	@property(cc.Prefab)
-	bigItemPrefab: cc.Prefab = null;
-
-	@property(cc.Prefab)
-	smallItemPrefab: cc.Prefab = null;
+	seedItemPrefab: cc.Prefab = null;
 
 	@property(LoadingDialogCtrl)
 	loadingDialogCtrl: LoadingDialogCtrl = null;
@@ -32,7 +29,20 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 		this.loadingDialogCtrl.show();
 		this.scrollView.content.removeAllChildren();
 		await this.executePreFrame(this._getItemGenerator(Number.parseInt(this.childNodeCountEditBox.string)), 1);
-		this.loadingDialogCtrl.hide();
+		this.scheduleOnce(() => {
+			ScrollViewPlus.optDc(this.scrollView);
+			this.loadingDialogCtrl.hide();
+		});
+	}
+
+	onScrollViewEventCallBack(scrollview: cc.ScrollView, eventType: cc.ScrollView.EventType, customEventData: any) {
+		if (eventType != cc.ScrollView.EventType.SCROLLING) {
+			return;
+		}
+		if (scrollview.content.childrenCount == 0) {
+			return;
+		}
+		ScrollViewPlus.optDc(scrollview);
 	}
 
 	/**
@@ -75,22 +85,13 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 
 	private *_getItemGenerator(length: number) {
 		for (let i = 0; i < length; i++) {
-			if (i % 2 == 0) {
-				yield this._initBigItem(i);
-			} else {
-				yield this._initSmallItem(i);
-			}
+			// 因为我这里就只有12张图片，所以就用 % 循环了
+			yield this._initSeedItemPrefab(`seed/${i % 12}`);
 		}
 	}
-	private _initBigItem(itemIndex: number) {
-		let itemNode = cc.instantiate(this.bigItemPrefab);
+	private _initSeedItemPrefab(picPath: string) {
+		let itemNode = cc.instantiate(this.seedItemPrefab);
 		itemNode.parent = this.scrollView.content;
-		itemNode.getComponent(BigItemPrefab).bindData(itemIndex);
-	}
-
-	private _initSmallItem(itemIndex: number) {
-		let itemNode = cc.instantiate(this.smallItemPrefab);
-		itemNode.parent = this.scrollView.content;
-		itemNode.getComponent(SmallItemPrefab).bindData(itemIndex);
+		itemNode.getComponent(SeedPicItemPrefab).bindData(picPath);
 	}
 }

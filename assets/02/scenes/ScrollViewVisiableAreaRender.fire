@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.33359375,
-      "y": 0.33359375,
+      "x": 0.33280029296875,
+      "y": 0.33280029296875,
       "z": 1
     },
     "_quat": {
@@ -80,17 +80,17 @@
         "__id__": 33
       },
       {
-        "__id__": 44
+        "__id__": 45
       }
     ],
     "_active": true,
     "_level": 1,
     "_components": [
       {
-        "__id__": 53
+        "__id__": 54
       },
       {
-        "__id__": 54
+        "__id__": 55
       }
     ],
     "_prefab": null,
@@ -1236,8 +1236,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": true,
-    "_string": "100",
-    "_N$string": "100",
+    "_string": "50",
+    "_N$string": "50",
     "_fontSize": 40,
     "_lineHeight": 50,
     "_enableWrapText": false,
@@ -1338,6 +1338,33 @@
     "_id": "502QojHq1NT7zaDS847BN2"
   },
   {
+    "__type__": "cc.Widget",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 23
+    },
+    "_enabled": true,
+    "alignMode": 1,
+    "_target": null,
+    "_alignFlags": 8,
+    "_left": 416,
+    "_right": 0,
+    "_top": 0,
+    "_bottom": 0,
+    "_verticalCenter": 0,
+    "_horizontalCenter": 0,
+    "_isAbsLeft": true,
+    "_isAbsRight": true,
+    "_isAbsTop": true,
+    "_isAbsBottom": true,
+    "_isAbsHorizontalCenter": true,
+    "_isAbsVerticalCenter": true,
+    "_originalWidth": 0,
+    "_originalHeight": 0,
+    "_id": "06kf0z185EuIIIjjD/l1fe"
+  },
+  {
     "__type__": "cc.EditBox",
     "_name": "",
     "_objFlags": 0,
@@ -1346,7 +1373,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "100",
+    "_string": "50",
     "_tabIndex": 0,
     "editingDidBegan": [],
     "textChanged": [],
@@ -1379,33 +1406,6 @@
     "_N$maxLength": 7,
     "_N$stayOnTop": false,
     "_id": "6cFy/iLbVNYYbAVAYOtLeF"
-  },
-  {
-    "__type__": "cc.Widget",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 23
-    },
-    "_enabled": true,
-    "alignMode": 1,
-    "_target": null,
-    "_alignFlags": 8,
-    "_left": 416,
-    "_right": 0,
-    "_top": 0,
-    "_bottom": 0,
-    "_verticalCenter": 0,
-    "_horizontalCenter": 0,
-    "_isAbsLeft": true,
-    "_isAbsRight": true,
-    "_isAbsTop": true,
-    "_isAbsBottom": true,
-    "_isAbsHorizontalCenter": true,
-    "_isAbsVerticalCenter": true,
-    "_originalWidth": 0,
-    "_originalHeight": 0,
-    "_id": "06kf0z185EuIIIjjD/l1fe"
   },
   {
     "__type__": "cc.Widget",
@@ -1450,7 +1450,7 @@
     "_level": 2,
     "_components": [
       {
-        "__id__": 43
+        "__id__": 44
       }
     ],
     "_prefab": null,
@@ -1838,7 +1838,11 @@
     "brake": 0.5,
     "elastic": true,
     "bounceDuration": 0.23,
-    "scrollEvents": [],
+    "scrollEvents": [
+      {
+        "__id__": 43
+      }
+    ],
     "cancelInnerEvents": true,
     "_N$content": {
       "__id__": 36
@@ -1846,9 +1850,17 @@
     "content": {
       "__id__": 36
     },
-    "_N$horizontalScrollBar": null,
-    "_N$verticalScrollBar": null,
-    "_id": "36KoKGUPNLFYcm2WmXMJQr"
+    "_id": "b2K3cCJ7lGIJ1d/MdWQDFf"
+  },
+  {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 2
+    },
+    "component": "",
+    "_componentId": "d1132rYPLlGmZunV8r2EPO2",
+    "handler": "onScrollViewEventCallBack",
+    "customEventData": ""
   },
   {
     "__type__": "cc.Widget",
@@ -1886,23 +1898,23 @@
     },
     "_children": [
       {
-        "__id__": 45
+        "__id__": 46
       },
       {
-        "__id__": 48
+        "__id__": 49
       }
     ],
     "_active": false,
     "_level": 2,
     "_components": [
       {
-        "__id__": 50
-      },
-      {
         "__id__": 51
       },
       {
         "__id__": 52
+      },
+      {
+        "__id__": 53
       }
     ],
     "_prefab": null,
@@ -1955,17 +1967,17 @@
     "_name": "DialogBg",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 44
+      "__id__": 45
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 46
+        "__id__": 47
       },
       {
-        "__id__": 47
+        "__id__": 48
       }
     ],
     "_prefab": null,
@@ -2018,7 +2030,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 45
+      "__id__": 46
     },
     "_enabled": true,
     "alignMode": 1,
@@ -2045,7 +2057,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 45
+      "__id__": 46
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -2073,14 +2085,14 @@
     "_name": "LoadingSprite",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 44
+      "__id__": 45
     },
     "_children": [],
     "_active": true,
     "_level": 3,
     "_components": [
       {
-        "__id__": 49
+        "__id__": 50
       }
     ],
     "_prefab": null,
@@ -2133,7 +2145,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 48
+      "__id__": 49
     },
     "_enabled": true,
     "_srcBlendFactor": 770,
@@ -2157,11 +2169,21 @@
     "_id": "454IwEysBDjLM1/DwXQsGN"
   },
   {
+    "__type__": "cc.BlockInputEvents",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 45
+    },
+    "_enabled": true,
+    "_id": "682fNFujZPbatbQx4dxBFK"
+  },
+  {
     "__type__": "cc.Widget",
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 44
+      "__id__": 45
     },
     "_enabled": true,
     "alignMode": 1,
@@ -2184,28 +2206,18 @@
     "_id": "77bJsQLEtLJJCBvbrUXz1C"
   },
   {
-    "__type__": "cc.BlockInputEvents",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 44
-    },
-    "_enabled": true,
-    "_id": "682fNFujZPbatbQx4dxBFK"
-  },
-  {
     "__type__": "609bat01EBOAqx48/i4ifAd",
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 44
+      "__id__": 45
     },
     "_enabled": true,
     "dialogBg": {
-      "__id__": 45
+      "__id__": 46
     },
     "loadingSpriteNode": {
-      "__id__": 48
+      "__id__": 49
     },
     "_id": "d05juQUtpBEpJMnKqvB2jx"
   },
@@ -2237,17 +2249,14 @@
     "scrollView": {
       "__id__": 42
     },
-    "bigItemPrefab": {
+    "seedItemPrefab": {
       "__uuid__": "dc3d3eb2-67d7-4842-943e-a5df4257cad9"
     },
-    "smallItemPrefab": {
-      "__uuid__": "03994c62-7886-446d-b00d-ca9ad0880555"
-    },
     "loadingDialogCtrl": {
-      "__id__": 52
+      "__id__": 53
     },
     "childNodeCountEditBox": {
-      "__id__": 30
+      "__id__": 31
     },
     "_id": "9fW2+oy6BGvL1hX8g2xBIg"
   }
