@@ -38,6 +38,10 @@ export default class SeedPicItemPrefab extends cc.Component {
 		// 显示Item节点
 		this.node.opacity = 255;
 
+		this.node.stopAllActions();
+		this.node.scale = 0;
+		this.node.runAction(cc.scaleTo(0.08, 1).easing(cc.easeCircleActionOut()));
+
 		// 加载并显示图片
 		this._loadAndShowPic();
 	}
@@ -47,6 +51,7 @@ export default class SeedPicItemPrefab extends cc.Component {
 	 */
 	onExitScrollView() {
 		this.node.opacity = 0;
+		this.node.stopAllActions();
 	}
 
 	/**
