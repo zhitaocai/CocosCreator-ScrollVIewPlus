@@ -18,6 +18,10 @@ export default class SeedPicItemPrefab extends cc.Component {
 
 	private _picPath: string = null;
 
+	onLoad() {
+		this.node.opacity = 0;
+	}
+
 	/**
 	 * 绑定数据
 	 *
