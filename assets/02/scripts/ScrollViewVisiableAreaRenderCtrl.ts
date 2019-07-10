@@ -1,5 +1,5 @@
 import LoadingDialogCtrl from "../../01/scripts/LoadingDialogCtrl";
-import SeedPicItemPrefab from "../prefabs/SeedPicItemPrefab";
+import SeedPicItemPrefab, { SeedPicItemData as SeedPicItemModel } from "../prefabs/SeedPicItemPrefab";
 import ScrollViewPlus from "./utils/ScrollViewPlus";
 
 const { ccclass, property } = cc._decorator;
@@ -20,10 +20,6 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 		tooltip: "输入需要创建的节点数量"
 	})
 	childNodeCountEditBox: cc.EditBox = null;
-
-	start() {
-		this.onFramingLoadBtnClick();
-	}
 
 	async onFramingLoadBtnClick() {
 		this.loadingDialogCtrl.show();
@@ -85,13 +81,15 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 
 	private *_getItemGenerator(length: number) {
 		for (let i = 0; i < length; i++) {
-			// 因为我这里就只有12张图片，所以就用 % 循环了
-			yield this._initSeedItemPrefab(`seed/${i % 12}`);
+			yield this._initSeedItemPrefab({
+				index: i,
+				picPath: `seed/${i % 12}` // 因为我这里就只有12张图片，所以就用 % 循环了
+			});
 		}
 	}
-	private _initSeedItemPrefab(picPath: string) {
+	private _initSeedItemPrefab(data: SeedPicItemModel) {
 		let itemNode = cc.instantiate(this.seedItemPrefab);
 		itemNode.parent = this.scrollView.content;
-		itemNode.getComponent(SeedPicItemPrefab).bindData(picPath);
+		itemNode.getComponent(SeedPicItemPrefab).bindData(data);
 	}
 }

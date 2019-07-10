@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.238610363321872,
-      "y": 0.238610363321872,
+      "x": 0.41795654296875,
+      "y": 0.41795654296875,
       "z": 1
     },
     "_quat": {
@@ -1835,7 +1835,7 @@
     "horizontal": false,
     "vertical": true,
     "inertia": true,
-    "brake": 0.5,
+    "brake": 0.2,
     "elastic": true,
     "bounceDuration": 0.23,
     "scrollEvents": [

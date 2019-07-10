@@ -2,6 +2,18 @@ import { ResourcesLoader } from "../scripts/utils/ResourcesLoader";
 
 const { ccclass, property } = cc._decorator;
 
+export type SeedPicItemData = {
+	/**
+	 * Item下标
+	 */
+	index: number;
+
+	/**
+	 * Item所加载的图片
+	 */
+	picPath: string;
+};
+
 @ccclass
 export default class SeedPicItemPrefab extends cc.Component {
 	@property(cc.Sprite)
@@ -16,7 +28,7 @@ export default class SeedPicItemPrefab extends cc.Component {
 	@property(cc.Node)
 	placeHolderLoadingNode: cc.Node = null;
 
-	private _picPath: string = null;
+	private _data: SeedPicItemData = null;
 
 	onLoad() {
 		this.node.opacity = 0;
@@ -24,24 +36,16 @@ export default class SeedPicItemPrefab extends cc.Component {
 
 	/**
 	 * 绑定数据
-	 *
-	 * @param picPath 图片地址
 	 */
-	bindData(picPath: string) {
-		this._picPath = picPath;
+	bindData(data: SeedPicItemData) {
+		this._data = data;
 	}
 
 	/**
 	 * 本Item进入ScrollView的时候回调
 	 */
 	onEnterSrcollView() {
-		// 显示Item节点
-		this.node.opacity = 255;
-
-		this.node.stopAllActions();
-		this.node.scale = 0;
-		this.node.runAction(cc.scaleTo(0.08, 1).easing(cc.easeCircleActionOut()));
-
+		this._show();
 		// 加载并显示图片
 		this._loadAndShowPic();
 	}
@@ -50,8 +54,7 @@ export default class SeedPicItemPrefab extends cc.Component {
 	 * 本Item离开ScrollView的时候回调
 	 */
 	onExitScrollView() {
-		this.node.opacity = 0;
-		this.node.stopAllActions();
+		this._hide();
 	}
 
 	/**
@@ -59,9 +62,29 @@ export default class SeedPicItemPrefab extends cc.Component {
 	 */
 	private async _loadAndShowPic() {
 		this._showPlaceHolder();
-		this.picSprite.spriteFrame = await ResourcesLoader.loadSpriteFrameFromResources(this._picPath);
-		this.descLabel.string = this._picPath;
+
+		// 模拟延迟一段时间后再加载成功
+		await new Promise((resolve, reject) => {
+			setTimeout(() => {
+				resolve();
+				// }, Math.random() * 1000);
+			}, 160);
+		});
+		this.picSprite.spriteFrame = await ResourcesLoader.loadSpriteFrameFromResources(this._data.picPath);
+		this.descLabel.string = `${this._data.index}: ${this._data.picPath}`;
 		this._hidePlaceHolder();
+	}
+
+	private _show() {
+		this.node.opacity = 255;
+		this.node.stopAllActions();
+		this.node.scale = 0.1;
+		this.node.runAction(cc.scaleTo(0.08, 1).easing(cc.easeSineOut()));
+	}
+
+	private _hide() {
+		this.node.opacity = 0;
+		this.node.stopAllActions();
 	}
 
 	private _showPlaceHolder() {
