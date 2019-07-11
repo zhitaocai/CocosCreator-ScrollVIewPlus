@@ -61,22 +61,22 @@ export default class ScrollViewPlus extends cc.ScrollView {
 
 		// 遍历 ScrollView Content 内容节点的子节点，对每个子节点的包围盒做和 ScrollView 可视区域包围盒做碰撞判断
 		scrollView.content.children.forEach((childNode: cc.Node) => {
+			// 没有绑定指定组件的子节点不处理
+			let itemComponent = childNode.getComponent(ScrollViewPlusItem);
+			if (itemComponent == null) {
+				return;
+			}
+
 			// 如果相交了，那么就显示，否则就隐藏
 			if (childNode.getBoundingBoxToWorld().intersects(bbRect)) {
-				let itemComponent = childNode.getComponent(ScrollViewPlusItem);
-				if (itemComponent) {
-					if (!itemComponent.isShowing) {
-						itemComponent.isShowing = true;
-						itemComponent.onEnter();
-					}
+				if (!itemComponent.isShowing) {
+					itemComponent.isShowing = true;
+					itemComponent.onEnter();
 				}
 			} else {
-				let itemComponent = childNode.getComponent(ScrollViewPlusItem);
-				if (itemComponent) {
-					if (itemComponent.isShowing) {
-						itemComponent.isShowing = false;
-						itemComponent.onExit();
-					}
+				if (itemComponent.isShowing) {
+					itemComponent.isShowing = false;
+					itemComponent.onExit();
 				}
 			}
 		});
