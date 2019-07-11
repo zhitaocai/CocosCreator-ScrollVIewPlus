@@ -1,7 +1,7 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class LoadingDialogCtrl extends cc.Component {
+export default class LoadingDialog extends cc.Component {
 	@property({
 		type: cc.Node,
 		tooltip: "对话框背景"

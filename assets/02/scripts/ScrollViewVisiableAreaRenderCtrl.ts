@@ -1,6 +1,6 @@
-import LoadingDialogCtrl from "../../01/scripts/LoadingDialogCtrl";
-import SeedPicItemPrefab, { SeedPicItemData as SeedPicItemModel } from "../prefabs/SeedPicItemPrefab";
+import SeedPicItemPrefab, { SeedPicItemData } from "../prefabs/SeedPicItemPrefab";
 import ScrollViewPlus from "./utils/ScrollViewPlus";
+import LoadingDialog from "../../prefabs/LoadingDialog";
 
 const { ccclass, property } = cc._decorator;
 
@@ -10,10 +10,7 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 	scrollView: cc.ScrollView = null;
 
 	@property(cc.Prefab)
-	seedItemPrefab: cc.Prefab = null;
-
-	@property(LoadingDialogCtrl)
-	loadingDialogCtrl: LoadingDialogCtrl = null;
+	scrollViewItemPrefab: cc.Prefab = null;
 
 	@property({
 		type: cc.EditBox,
@@ -21,13 +18,20 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 	})
 	childNodeCountEditBox: cc.EditBox = null;
 
+	@property(LoadingDialog)
+	loadingDialog: LoadingDialog = null;
+
+	onLoad() {
+		this.loadingDialog.hide();
+	}
+
 	async onFramingLoadBtnClick() {
-		this.loadingDialogCtrl.show();
+		this.loadingDialog.show();
 		this.scrollView.content.removeAllChildren();
 		await this.executePreFrame(this._getItemGenerator(Number.parseInt(this.childNodeCountEditBox.string)), 1);
 		this.scheduleOnce(() => {
 			ScrollViewPlus.optDc(this.scrollView);
-			this.loadingDialogCtrl.hide();
+			this.loadingDialog.hide();
 		});
 	}
 
@@ -81,14 +85,14 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 
 	private *_getItemGenerator(length: number) {
 		for (let i = 0; i < length; i++) {
-			yield this._initSeedItemPrefab({
+			yield this._initScrollViewItemPrefab({
 				index: i,
 				picPath: `seed/${i % 12}` // 因为我这里就只有12张图片，所以就用 % 循环了
 			});
 		}
 	}
-	private _initSeedItemPrefab(data: SeedPicItemModel) {
-		let itemNode = cc.instantiate(this.seedItemPrefab);
+	private _initScrollViewItemPrefab(data: SeedPicItemData) {
+		let itemNode = cc.instantiate(this.scrollViewItemPrefab);
 		itemNode.parent = this.scrollView.content;
 		itemNode.getComponent(SeedPicItemPrefab).bindData(data);
 	}
