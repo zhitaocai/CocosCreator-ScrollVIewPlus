@@ -50,14 +50,21 @@ export default class ScrollViewPlus extends cc.ScrollView {
 	 * 2. 退出ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onExit 方法（该方法实际会回调对应事件）
 	 */
 	public static optDc(scrollView: cc.ScrollView) {
-		// 计算 ScrollView 可视区域（可以理解为包围盒）在世界坐标系下的范围
-		let bbCenterPoint = scrollView.node.parent.convertToWorldSpaceAR(
+		// 获取 ScrollView Node 的左下角坐标在世界坐标系中的坐标
+		let svLeftBottomPoint: cc.Vec2 = scrollView.node.parent.convertToWorldSpaceAR(
 			cc.v2(
 				scrollView.node.x - scrollView.node.anchorX * scrollView.node.width,
 				scrollView.node.y - scrollView.node.anchorY * scrollView.node.height
 			)
 		);
-		let bbRect = cc.rect(bbCenterPoint.x, bbCenterPoint.y, scrollView.node.width, scrollView.node.height);
+
+		// 求出 ScrollView 可视区域在世界坐标系中的矩形（碰撞盒）
+		let svBBoxRect: cc.Rect = cc.rect(
+			svLeftBottomPoint.x,
+			svLeftBottomPoint.y,
+			scrollView.node.width,
+			scrollView.node.height
+		);
 
 		// 遍历 ScrollView Content 内容节点的子节点，对每个子节点的包围盒做和 ScrollView 可视区域包围盒做碰撞判断
 		scrollView.content.children.forEach((childNode: cc.Node) => {
@@ -68,7 +75,7 @@ export default class ScrollViewPlus extends cc.ScrollView {
 			}
 
 			// 如果相交了，那么就显示，否则就隐藏
-			if (childNode.getBoundingBoxToWorld().intersects(bbRect)) {
+			if (childNode.getBoundingBoxToWorld().intersects(svBBoxRect)) {
 				if (!itemComponent.isShowing) {
 					itemComponent.isShowing = true;
 					itemComponent.onEnter();
@@ -77,46 +84,6 @@ export default class ScrollViewPlus extends cc.ScrollView {
 				if (itemComponent.isShowing) {
 					itemComponent.isShowing = false;
 					itemComponent.onExit();
-				}
-			}
-		});
-	}
-
-	public static EVENT_NAME_ENTER_SCROLLVIEW = "event_name_enter_scrollview";
-
-	public static EVENT_NAME_EXIT_SCROLLVIEW = "event_name_exit_scrollview";
-	/**
-	 * 优化 ScrollView Content 节点 DC，可以手动调用
-	 *
-	 * 具体为在ScrollView可视区域内的节点，opacity 设置为 255，不在可视区域的节点，opacity 设置为 0
-	 *
-	 * 同时，
-	 *
-	 * 触发展示时，ScrollView Content 的子节点会给自身发送 enter_scrollview 事件
-	 * 触发隐藏时，ScrollView Content 的子节点会给自身发送 exit_scrollview 事件
-	 */
-	public static optDcV1(scrollView: cc.ScrollView) {
-		// 计算 ScrollView 可视区域（可以理解为包围盒）在世界坐标系下的范围
-		let bbCenterPoint = scrollView.node.parent.convertToWorldSpaceAR(
-			cc.v2(
-				scrollView.node.x - scrollView.node.anchorX * scrollView.node.width,
-				scrollView.node.y - scrollView.node.anchorY * scrollView.node.height
-			)
-		);
-		let bbRect = cc.rect(bbCenterPoint.x, bbCenterPoint.y, scrollView.node.width, scrollView.node.height);
-
-		// 遍历 ScrollView Content 内容节点的子节点，对每个子节点的包围盒做和 ScrollView 可视区域包围盒做碰撞判断
-		// 如果相交了，那么就显示，否则就隐藏
-		scrollView.content.children.forEach((childNode: cc.Node) => {
-			if (childNode.getBoundingBoxToWorld().intersects(bbRect)) {
-				if (childNode.opacity != 255) {
-					childNode.opacity = 255;
-					childNode.emit(ScrollViewPlus.EVENT_NAME_ENTER_SCROLLVIEW);
-				}
-			} else {
-				if (childNode.opacity != 0) {
-					childNode.opacity = 0;
-					childNode.emit(ScrollViewPlus.EVENT_NAME_EXIT_SCROLLVIEW);
 				}
 			}
 		});
