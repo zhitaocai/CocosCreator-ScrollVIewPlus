@@ -76,10 +76,12 @@ export default class SeedPicItemPrefab extends cc.Component {
 	}
 
 	private _show() {
-		this.node.opacity = 255;
 		this.node.stopAllActions();
+		this.node.opacity = 0;
 		this.node.scale = 0.1;
-		this.node.runAction(cc.scaleTo(0.08, 1).easing(cc.easeSineOut()));
+		this.node.runAction(
+			cc.spawn(cc.scaleTo(0.16, 1).easing(cc.easeSineOut()), cc.fadeTo(0.16, 255).easing(cc.easeSineOut()))
+		);
 	}
 
 	private _hide() {
