@@ -45,8 +45,7 @@ export default class SeedPicItemPrefab extends cc.Component {
 	 * 本Item进入ScrollView的时候回调
 	 */
 	onEnterSrcollView() {
-		this._show();
-		// 加载并显示图片
+		this.node.opacity = 255;
 		this._loadAndShowPic();
 	}
 
@@ -54,7 +53,7 @@ export default class SeedPicItemPrefab extends cc.Component {
 	 * 本Item离开ScrollView的时候回调
 	 */
 	onExitScrollView() {
-		this._hide();
+		this.node.opacity = 0;
 	}
 
 	/**
@@ -73,20 +72,6 @@ export default class SeedPicItemPrefab extends cc.Component {
 		this.picSprite.spriteFrame = await ResourcesLoader.loadSpriteFrameFromResources(this._data.picPath);
 		this.descLabel.string = `${this._data.index}: ${this._data.picPath}`;
 		this._hidePlaceHolder();
-	}
-
-	private _show() {
-		this.node.stopAllActions();
-		this.node.opacity = 0;
-		this.node.scale = 0.1;
-		this.node.runAction(
-			cc.spawn(cc.scaleTo(0.16, 1).easing(cc.easeSineOut()), cc.fadeTo(0.16, 255).easing(cc.easeSineOut()))
-		);
-	}
-
-	private _hide() {
-		this.node.opacity = 0;
-		this.node.stopAllActions();
 	}
 
 	private _showPlaceHolder() {
