@@ -6,8 +6,8 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
-	@property(cc.ScrollView)
-	scrollView: cc.ScrollView = null;
+	@property(ScrollViewPlus)
+	scrollViewPlus: ScrollViewPlus = null;
 
 	@property(cc.Prefab)
 	scrollViewItemPrefab: cc.Prefab = null;
@@ -27,22 +27,12 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 
 	async onFramingLoadBtnClick() {
 		this.loadingDialog.show();
-		this.scrollView.content.removeAllChildren();
+		this.scrollViewPlus.content.removeAllChildren();
 		await this.executePreFrame(this._getItemGenerator(Number.parseInt(this.childNodeCountEditBox.string)), 1);
-		this.scheduleOnce(() => {
-			ScrollViewPlus.optDc(this.scrollView);
-			this.loadingDialog.hide();
-		});
-	}
-
-	onScrollViewEventCallBack(scrollview: cc.ScrollView, eventType: cc.ScrollView.EventType, customEventData: any) {
-		if (eventType != cc.ScrollView.EventType.SCROLLING) {
-			return;
-		}
-		if (scrollview.content.childrenCount == 0) {
-			return;
-		}
-		ScrollViewPlus.optDc(scrollview);
+		// 在创建好子节点之后，先手动调用一次DC优化，触发当前在可视区域内的节点的进入逻辑
+		// 后续的ScrollView滚动时，内部自动回调
+		this.scrollViewPlus.optDc();
+		this.loadingDialog.hide();
 	}
 
 	/**
@@ -93,7 +83,7 @@ export default class ScrollViewVisiableAreaRenderCtrl extends cc.Component {
 	}
 	private _initScrollViewItemPrefab(data: SeedPicItemData) {
 		let itemNode = cc.instantiate(this.scrollViewItemPrefab);
-		itemNode.parent = this.scrollView.content;
+		itemNode.parent = this.scrollViewPlus.content;
 		itemNode.getComponent(SeedPicItemPrefab).bindData(data);
 	}
 }

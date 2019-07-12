@@ -6,7 +6,7 @@ const { ccclass, property } = cc._decorator;
  * @classdesc 只渲染可视区域的ScrollView
  * @author caizhitao
  * @version 0.1.0
- * @since 2019-05-30
+ * @since 2019-07-12
  * @description
  *
  * 用法：
@@ -16,21 +16,22 @@ const { ccclass, property } = cc._decorator;
  * 原理：
  *
  *      1. 滚动时，判断子节点是否进入了/离开了可视区域
- *      2. 根据结果回到出去，可以实现类似以下功能：
+ *      2. 根据结果回调对应事件，在可以实现类似以下功能：
  *          * 控制可视区域Item显示（透明度改为 255 ），非可视区域Item隐藏（透明度改为 0 ）
- *      2. 非滚动时，尤其为第一次初始化时，也可以手动调用  ScrollViewPlus.optDc(scrollview: ScrollView) 方法去实现DC优化，原理和上述一致
  */
 @ccclass
 export default class ScrollViewPlus extends cc.ScrollView {
 	onEnable() {
-		this.node.on("scrolling", this._onScrolling, this);
+		super.onEnable();
+		this.node.on("scrolling", this._onScrollingDrawCallOpt, this);
 	}
 
 	onDisable() {
-		this.node.off("scrolling", this._onScrolling, this);
+		super.onDisable();
+		this.node.off("scrolling", this._onScrollingDrawCallOpt, this);
 	}
 
-	private _onScrolling() {
+	private _onScrollingDrawCallOpt() {
 		if (this.content.childrenCount == 0) {
 			return;
 		}
@@ -46,8 +47,8 @@ export default class ScrollViewPlus extends cc.ScrollView {
 	 *
 	 * 具体为
 	 *
-	 * 1. 进入ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onEnter 方法（该方法实际会回调对应事件）
-	 * 2. 退出ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onExit 方法（该方法实际会回调对应事件）
+	 * 1. 进入ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onEnterScorllViewEvents 数组事件
+	 * 2. 退出ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onExitScorllViewEvents 数组事件
 	 */
 	public static optDc(scrollView: cc.ScrollView) {
 		// 获取 ScrollView Node 的左下角坐标在世界坐标系中的坐标
@@ -78,12 +79,10 @@ export default class ScrollViewPlus extends cc.ScrollView {
 			if (childNode.getBoundingBoxToWorld().intersects(svBBoxRect)) {
 				if (!itemComponent.isShowing) {
 					itemComponent.isShowing = true;
-					itemComponent.onEnter();
 				}
 			} else {
 				if (itemComponent.isShowing) {
 					itemComponent.isShowing = false;
-					itemComponent.onExit();
 				}
 			}
 		});
