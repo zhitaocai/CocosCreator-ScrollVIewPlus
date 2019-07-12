@@ -1,5 +1,3 @@
-import ScrollViewPlus from "./ScrollViewPlus";
-
 const { ccclass, property } = cc._decorator;
 
 @ccclass

@@ -1,6 +1,6 @@
-import SeedPicItemPrefab, { SeedPicItemData } from "../prefabs/SeedPicItemPrefab";
-import ScrollViewPlus from "./utils/ScrollViewPlus";
 import LoadingDialog from "../../prefabs/LoadingDialog";
+import ScrollViewPlus from "./ScrollViewPlus";
+import SeedPicItemPrefab, { SeedPicItemData } from "./SeedPicItemPrefab";
 
 const { ccclass, property } = cc._decorator;
 

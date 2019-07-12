@@ -1,4 +1,4 @@
-import { ResourcesLoader } from "../scripts/utils/ResourcesLoader";
+import { ResourcesLoader } from "../../scripts/utils/ResourcesLoader";
 
 const { ccclass, property } = cc._decorator;
 
