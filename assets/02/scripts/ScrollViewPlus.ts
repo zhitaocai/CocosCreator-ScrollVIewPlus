@@ -21,70 +21,81 @@ const { ccclass, property } = cc._decorator;
  */
 @ccclass
 export default class ScrollViewPlus extends cc.ScrollView {
-	onEnable() {
-		super.onEnable();
-		this.node.on("scrolling", this._onScrollingDrawCallOpt, this);
-	}
+    @property({
+        tooltip: "是否计算在可视区域中Item的相对位置（可能会相对耗性能）"
+    })
+    caculatePosition: boolean = false;
 
-	onDisable() {
-		super.onDisable();
-		this.node.off("scrolling", this._onScrollingDrawCallOpt, this);
-	}
+    onEnable() {
+        super.onEnable();
+        this.node.on("scrolling", this._onScrollingDrawCallOpt, this);
+    }
 
-	private _onScrollingDrawCallOpt() {
-		if (this.content.childrenCount == 0) {
-			return;
-		}
-		this.optDc();
-	}
+    onDisable() {
+        super.onDisable();
+        this.node.off("scrolling", this._onScrollingDrawCallOpt, this);
+    }
 
-	public optDc() {
-		ScrollViewPlus.optDc(this);
-	}
+    private _onScrollingDrawCallOpt() {
+        if (this.content.childrenCount == 0) {
+            return;
+        }
+        this.optDc();
+    }
 
-	/**
-	 * 优化 ScrollView Content 节点 DC，可以手动调用
-	 *
-	 * 具体为
-	 *
-	 * 1. 进入ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onEnterScorllViewEvents 数组事件
-	 * 2. 退出ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onExitScorllViewEvents 数组事件
-	 */
-	public static optDc(scrollView: cc.ScrollView) {
-		// 获取 ScrollView Node 的左下角坐标在世界坐标系中的坐标
-		let svLeftBottomPoint: cc.Vec2 = scrollView.node.parent.convertToWorldSpaceAR(
-			cc.v2(
-				scrollView.node.x - scrollView.node.anchorX * scrollView.node.width,
-				scrollView.node.y - scrollView.node.anchorY * scrollView.node.height
-			)
-		);
+    public optDc() {
+        ScrollViewPlus.optDc(this, this.caculatePosition);
+    }
 
-		// 求出 ScrollView 可视区域在世界坐标系中的矩形（碰撞盒）
-		let svBBoxRect: cc.Rect = cc.rect(
-			svLeftBottomPoint.x,
-			svLeftBottomPoint.y,
-			scrollView.node.width,
-			scrollView.node.height
-		);
+    /**
+     * 优化 ScrollView Content 节点 DC，可以手动调用
+     *
+     * 具体为
+     *
+     * 1. 进入ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onEnterScorllViewEvents 数组事件
+     * 2. 退出ScrollView可视区域是，回调对应 Content 子节点上挂载的 ScollViewPlusItem 组件的 onExitScorllViewEvents 数组事件
+     */
+    public static optDc(scrollView: cc.ScrollView, caculatePosition: boolean) {
+        // 获取 ScrollView Node 的左下角坐标在世界坐标系中的坐标
+        let svLeftBottomPoint: cc.Vec2 = scrollView.node.parent.convertToWorldSpaceAR(
+            cc.v2(
+                scrollView.node.x - scrollView.node.anchorX * scrollView.node.width,
+                scrollView.node.y - scrollView.node.anchorY * scrollView.node.height
+            )
+        );
 
-		// 遍历 ScrollView Content 内容节点的子节点，对每个子节点的包围盒做和 ScrollView 可视区域包围盒做碰撞判断
-		scrollView.content.children.forEach((childNode: cc.Node) => {
-			// 没有绑定指定组件的子节点不处理
-			let itemComponent = childNode.getComponent(ScrollViewPlusItem);
-			if (itemComponent == null) {
-				return;
-			}
+        // 求出 ScrollView 可视区域在世界坐标系中的矩形（碰撞盒）
+        let svBBoxRect: cc.Rect = cc.rect(svLeftBottomPoint.x, svLeftBottomPoint.y, scrollView.node.width, scrollView.node.height);
 
-			// 如果相交了，那么就显示，否则就隐藏
-			if (childNode.getBoundingBoxToWorld().intersects(svBBoxRect)) {
-				if (!itemComponent.isShowing) {
-					itemComponent.isShowing = true;
-				}
-			} else {
-				if (itemComponent.isShowing) {
-					itemComponent.isShowing = false;
-				}
-			}
-		});
-	}
+        // 遍历 ScrollView Content 内容节点的子节点，对每个子节点的包围盒做和 ScrollView 可视区域包围盒做碰撞判断
+        scrollView.content.children.forEach((childNode: cc.Node) => {
+            // 没有绑定指定组件的子节点不处理
+            let itemComponent = childNode.getComponent(ScrollViewPlusItem);
+            if (itemComponent == null) {
+                return;
+            }
+
+            // 如果相交了，那么就显示，否则就隐藏
+            let childNodeBBox = childNode.getBoundingBoxToWorld();
+            if (childNodeBBox.intersects(svBBoxRect)) {
+                if (!itemComponent.isShowing) {
+                    itemComponent.isShowing = true;
+                    itemComponent.publishOnEnterScrollView();
+                }
+                if (caculatePosition) {
+                    if (itemComponent.isShowing) {
+                        itemComponent.publishOnPositionChange(
+                            (childNodeBBox.x - (svBBoxRect.x - childNodeBBox.width / 2)) / (childNodeBBox.width + svBBoxRect.width),
+                            (childNodeBBox.y - (svBBoxRect.y - childNodeBBox.height / 2)) / (childNodeBBox.height + svBBoxRect.height)
+                        );
+                    }
+                }
+            } else {
+                if (itemComponent.isShowing) {
+                    itemComponent.isShowing = false;
+                    itemComponent.publishOnExitScrollView();
+                }
+            }
+        });
+    }
 }

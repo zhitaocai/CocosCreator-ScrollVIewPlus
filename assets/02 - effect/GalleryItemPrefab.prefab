@@ -34,7 +34,7 @@
       }
     ],
     "_prefab": {
-      "__id__": 14
+      "__id__": 15
     },
     "_opacity": 255,
     "_color": {
@@ -356,6 +356,11 @@
         "__id__": 13
       }
     ],
+    "onPositionChangeEvents": [
+      {
+        "__id__": 14
+      }
+    ],
     "_id": ""
   },
   {
@@ -376,6 +381,16 @@
     "component": "",
     "_componentId": "671b83RCTBPpYx9Eee3Oipe",
     "handler": "onExitScrollView",
+    "customEventData": ""
+  },
+  {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 1
+    },
+    "component": "",
+    "_componentId": "671b83RCTBPpYx9Eee3Oipe",
+    "handler": "onPositionChange",
     "customEventData": ""
   },
   {
