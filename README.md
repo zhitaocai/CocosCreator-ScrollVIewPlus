@@ -1,6 +1,6 @@
 # Cocos Creator ScrollView 优化示例
 
-[![](https://img.shields.io/badge/Release-0.1.0-green.svg)](https://github.com/zhitaocai/CocosCreator-ScrollVIewPlus/blob/master/CHANGELOG.md)
+[![](https://img.shields.io/badge/Release-0.2.0-green.svg)](https://github.com/zhitaocai/CocosCreator-ScrollVIewPlus/blob/master/CHANGELOG.md)
 [![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/zhitaocai/CocosCreator-ScrollVIewPlus/blob/master/LICENSE)
 [![](https://img.shields.io/badge/Support-Cocos%20Creator%20v2.x-orange.svg)](http://www.cocos.com/creator)
 
@@ -9,10 +9,10 @@
 这是一个针对 ScrollView 性能优化示例项目，将包括以下优化
 
 * [x] [01. 分帧加载](https://www.jianshu.com/p/7f8fa125cd4f)
+* [x] [02.可视区域渲染](https://www.jianshu.com/p/c5daabbb7719)
 
 TODO:
 
-* [ ] 02.可视区域渲染
 * [ ] 03.复用实现
 * [ ] 04.合批优化
 
